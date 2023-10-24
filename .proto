@@ -1,0 +1,58 @@
+syntax = "proto3";
+package tasktracker;
+
+import "google/protobuf/timestamp.proto";
+
+enum TaskStatus {
+  TODO = 0;
+  DOING = 1;
+  DONE = 2;
+}
+
+message Task {
+  int32 id = 1;
+  string title = 2;
+  string content = 3;
+  string tag = 4;
+  google.protobuf.Timestamp created = 5;
+  google.protobuf.Timestamp started = 6;
+  google.protobuf.Timestamp ended = 7;
+  TaskStatus status = 8;
+}
+
+service TaskService {
+  rpc CreateTask (Task) returns (int32);
+  rpc ListTasks (ListTasksRequest) returns (repeated Task);
+  rpc ExecuteTask (ExecuteTaskRequest) returns (ExecuteTaskResponse);
+  rpc FinalizeTask (FinalizeTaskRequest) returns (FinalizeTaskResponse);
+  rpc RemoveTask (RemoveTaskRequest) returns (RemoveTaskResponse);
+}
+
+message ListTasksRequest {
+  TaskStatus queue = 1;
+  string filter = 2;
+}
+
+message ExecuteTaskRequest {
+  int32 task_id = 1;
+}
+
+message ExecuteTaskResponse {
+  string message = 1;
+}
+
+message FinalizeTaskRequest {
+  int32 task_id = 1;
+}
+
+message FinalizeTaskResponse {
+  string message = 1;
+}
+
+message RemoveTaskRequest {
+  int32 task_id = 1;
+}
+
+message RemoveTaskResponse {
+  string message = 1;
+}
